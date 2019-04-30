@@ -2,6 +2,9 @@
 import xarray as xr
 import numpy as np
 from varlist import var_list
+import time
+
+t0 = time.time()
 
 for year in np.arange(1987, 2018):
     
