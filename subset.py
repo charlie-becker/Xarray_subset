@@ -11,10 +11,12 @@ for year in np.arange(1987, 2018):
     # open multi-file dataset (this function accepts unix wildcards)
     d = xr.open_mfdataset('/mnt/wrf_history/vol??/wrf_out/wy_' + str(year) + '/d02/wrfout_d02_*', drop_variables=var_list, concat_dim='Time')
     
+    # Swap time and XTIME
+    d = d.swap_dims({'Time':'XTIME'})	
     # Get mean/min/max by day of year for desired variables 
-    new_array = d[['T2','Q2','SWDOWN','SWNORM']].groupby('XTIME.dayofyear').mean(dim='Time') # create daily means of few variables
-    new_array['TMIN'] = d['T2'].groupby('XTIME.dayofyear').min(dim='Time') # create daily minimum temperature
-    new_array['TMAX'] = d['T2'].groupby('XTIME.dayofyear').max(dim='Time') # create daily maximum temperature
+    new_array = d[['T2','Q2','SWDOWN','SWNORM']].resample(XTIME = '24H').mean()[0:-1,:,:] # create daily means of few variables
+    new_array['TMIN'] = d['T2'].resample(XTIME = '24H').min()[0:-1,:,:] # create daily minimum temperature
+    new_array['TMAX'] = d['T2'].resample(XTIME = '24H').max()[0:-1,:,:] # create daily maximum temperature
     new_array = new_array.rename({'T2' : 'TMEAN'}) # rename T2 as TMEAN
     
     # Adjust some meta data
