@@ -6,7 +6,7 @@ import time
 
 t0 = time.time()
 
-for year in np.arange(1987, 2018):
+for year in np.arange(1988, 2018):
     
     # open multi-file dataset (this function accepts unix wildcards)
     d = xr.open_mfdataset('/mnt/wrf_history/vol??/wrf_out/wy_' + str(year) + '/d02/wrfout_d02_*', drop_variables=var_list, concat_dim='Time')
