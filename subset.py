@@ -3,13 +3,17 @@ import xarray as xr
 import numpy as np
 from varlist import var_list
 import time
+import glob
 
 t0 = time.time()
 
 for year in np.arange(1988, 2018):
     
+    # Select all files except last (which is a repeat of the first hour of the following water year) for each WY
+    files = sorted(glob.glob('/mnt/wrf_history/vol??/wrf_out/wy_' + str(year) + '/d02/wrfout_d02_*'))[:-1]
+
     # open multi-file dataset (this function accepts unix wildcards)
-    d = xr.open_mfdataset('/mnt/wrf_history/vol??/wrf_out/wy_' + str(year) + '/d02/wrfout_d02_*', drop_variables=var_list, concat_dim='Time')
+    d = xr.open_mfdataset(files, drop_variables=var_list, concat_dim='Time')
     
     # Swap time and XTIME
     d = d.swap_dims({'Time':'XTIME'})	
