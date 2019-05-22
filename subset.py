@@ -18,9 +18,9 @@ for year in np.arange(1988, 2018):
     # Swap time and XTIME
     d = d.swap_dims({'Time':'XTIME'})	
     # Get mean/min/max by day of year for desired variables 
-    new_array = d[['T2','Q2','SWDOWN','SWNORM']].resample(XTIME = '24H').mean() # create daily means of few variables
-    new_array['TMIN'] = d['T2'].resample(XTIME = '24H').min() # create daily minimum temperature
-    new_array['TMAX'] = d['T2'].resample(XTIME = '24H').max()  # create daily maximum temperature
+    new_array = d[['T2','Q2','SWDOWN','SWNORM']].resample(XTIME = '24H').mean(dim = 'XTIME') # create daily means of few variables
+    new_array['TMIN'] = d['T2'].resample(XTIME = '24H').min(dim = 'XTIME') # create daily minimum temperature
+    new_array['TMAX'] = d['T2'].resample(XTIME = '24H').max(dim = 'XTIME')  # create daily maximum temperature
     new_array = new_array.rename({'T2' : 'TMEAN'}) # rename T2 as TMEAN
     
     # Adjust some meta data
